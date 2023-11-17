@@ -3,7 +3,6 @@ import pandas as pd
 import streamlit as st
 from typing import List, Tuple
 import plotly.express as px
-import pendulum
 
 def set_page_config():
     st.set_page_config(
@@ -103,11 +102,8 @@ def display_kpi_metrics(kpis: List[float], kpi_names: List[str]):
 
 
 #################Slide bar #################
-def display_sidebar(data: pd.DataFrame) -> Tuple[List[str], List[str], List[str]]:
+def display_sidebar(data: pd.DataFrame) -> Tuple[List[str], List[str]]:
     st.sidebar.header("Filters")
-    # start_date = pd.Timestamp(st.sidebar.date_input("Start date", data['date_impression'].min().date()))
-    # end_date = pd.Timestamp(st.sidebar.date_input("End date", data['date_impression'].max().date()))
-
     ages_lines = sorted(data['age'].unique())
     selected_ages_lines = st.sidebar.multiselect("Select age", ages_lines, ages_lines)
 
@@ -119,21 +115,6 @@ def display_sidebar(data: pd.DataFrame) -> Tuple[List[str], List[str], List[str]
 
 #############CHARTS
 def display_charts(data: pd.DataFrame):
-
-
-    # if combine_product_lines:
-    #     fig = px.area(data, x='ORDERDATE', y='SALES',
-    #                   title="Sales by Product Line Over Time", width=900, height=500)
-    # else:
-    #     fig = px.area(data, x='ORDERDATE', y='SALES', color='PRODUCTLINE',
-    #                   title="Sales by Product Line Over Time", width=900, height=500)
-    #
-    # fig.update_layout(margin=dict(l=20, r=20, t=50, b=20))
-    # fig.update_xaxes(rangemode='tozero', showgrid=False)
-    # fig.update_yaxes(rangemode='tozero', showgrid=True)
-    # st.plotly_chart(fig, use_container_width=True)
-
-
 
     st.subheader("CA by Campaign")
     ca_per_campaign = data.groupby("campaign_id", as_index=False).agg(ca=("price", "sum"))
@@ -173,12 +154,6 @@ def display_charts(data: pd.DataFrame):
     st.plotly_chart(fig3)
 
 
-
-
-
-
-
-
 def main():
     set_page_config()
     data = load_data()
@@ -195,19 +170,6 @@ def main():
 
     display_charts(filtered_data)
 
-    # Uncomment and complete the necessary parts of the code below
-    # selected_product_lines, selected_countries, selected_statuses = display_sidebar(data)
-
-    # filtered_data = data.copy()
-    # filtered_data = filter_data(filtered_data, 'PRODUCTLINE', selected_product_lines)
-    # filtered_data = filter_data(filtered_data, 'COUNTRY', selected_countries)
-    # filtered_data = filter_data(filtered_data, 'STATUS', selected_statuses)
-
-    # kpis = calculate_kpis(filtered_data)
-    # kpi_names = ["Total Sales", "Total Orders", "Average Sales per Order", "Unique Customers"]
-    # display_kpi_metrics(kpis, kpi_names)
-
-    # display_charts(filtered_data)
 
 if __name__ == '__main__':
     main()
