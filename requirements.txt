@@ -1,0 +1,5 @@
+Path
+pandas
+streamlit
+Typing
+plotly.express
